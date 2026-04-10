@@ -105,7 +105,7 @@
     <string name="panic_button_description">显示悬浮球用于快速隐藏。悬浮球仅在非隐藏状态下可见。</string>
     <string name="in_app_update_failed">新更新可用但自动更新失败。请手动更新。</string>
     <string name="failed_to_open_doc_tree">无法打开文件选择器</string>
-    <string name="failed_to_open_doc_tree_description">您的系统似乎没有默认文件管理器？请长按 “选择隐藏文件夹” 按键手动设置路径。</string>
+    <string name="failed_to_open_doc_tree_description">您的系统似乎没有默认文件管理器？请长按 "选择隐藏文件夹" 按键手动设置路径。</string>
     <string name="search">搜索</string>
     <string name="notification_channel_name">快速隐藏服务</string>
     <string name="quick_hide">快速隐藏</string>
@@ -199,5 +199,33 @@
     <string name="hide_from_recents_description">最近用过的应用屏幕中看不到 Amarok。</string>
     <string name="confirm_with_countdown">确认（%1$d 秒）</string>
     <string name="hide_amarok_icon_dialog_title">隐藏 Amarok 图标</string>
-    <string name="hide_amarok_icon_dialog_message">此选项将使启动器中看不到 Amarok。可以在拨号器上按 *#*#262765#*#* (T9 键盘上按 262765 会拼写出 “amarok”）再次访问 Amarok。</string>
+    <string name="hide_amarok_icon_dialog_message">此选项将使启动器中看不到 Amarok。可以在拨号器上按 *#*#262765#*#* (T9 键盘上按 262765 会拼写出 "amarok"）再次访问 Amarok。</string>
+    <string name="create_shortcut">创建快捷方式</string>
+    <string name="shortcut_not_supported">当前启动器不支持固定快捷方式。</string>
+    <string name="shortcut_disabled_hint">此快捷方式已被移除。</string>
+
+    <!-- Config export / import -->
+    <string name="data_category_title">数据</string>
+    <string name="export_config">导出配置</string>
+    <string name="export_config_description">将隐藏应用列表和快捷方式列表导出为 JSON 文件</string>
+    <string name="export_success">导出成功</string>
+    <string name="export_failed">导出失败</string>
+    <string name="import_config">导入配置</string>
+    <string name="import_config_description">从 JSON 文件导入配置，与本地列表合并</string>
+    <string name="import_failed">导入失败，请检查文件格式</string>
+    <string name="import_result_title">导入结果</string>
+    <string name="import_section_hide">隐藏应用</string>
+    <string name="import_section_shortcut">快捷方式</string>
+    <string name="import_hide_success">成功导入 %1$d 个</string>
+    <string name="import_hide_skipped">跳过 %1$d 个</string>
+    <string name="import_sc_pending">待创建 %1$d 个</string>
+    <string name="import_sc_skipped">跳过 %1$d 个</string>
+    <string name="import_sc_create_btn">开始创建快捷方式</string>
+    <string name="import_sc_creating">创建中…</string>
+    <string name="import_sc_done">创建完成</string>
+    <string name="import_not_installed">未安装</string>
+    <string name="import_section_file">隐藏文件</string>
+    <string name="import_file_success">成功导入 %1$d 个</string>
+    <string name="import_file_skipped">跳过 %1$d 个</string>
+    <string name="import_not_exist">文件不存在</string>
 </resources>

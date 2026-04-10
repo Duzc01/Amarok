@@ -1,58 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/hideapp_cb_ishidden"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp" />
+    <!-- 第一行：图标 + 应用名/包名 + 隐藏 checkbox，固定高度保证对齐稳定 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
 
+        <!--
+            图标用 40dp（不用 sp），对齐计算稳定：
+            第二行文字 paddingStart = 16(marginStart) + 40(icon) + 12(gap) = 68dp
+        -->
+        <ImageView
+            android:id="@+id/hideapp_iv_appicon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_null" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/hideapp_cb_ishidden"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@id/hideapp_cb_ishidden"
+            android:layout_toEndOf="@id/hideapp_iv_appicon"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/hideapp_tv_appname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="APP Name"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/hideapp_tv_pkgname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="APP PkgName"
+                android:textSize="8sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--
+        第二行：创建快捷方式（仅已隐藏时显示，默认 GONE）
+        paddingStart=68dp 精确对齐应用名左边：16(icon margin) + 40(icon) + 12(gap)
+    -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/hideapp_ll_shortcut"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_toStartOf="@id/hideapp_cb_ishidden"
-        android:layout_toEndOf="@id/hideapp_iv_appicon"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="68dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/hideapp_tv_appname"
-            android:layout_width="wrap_content"
+            android:id="@+id/hideapp_tv_shortcut"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="APP Name"
-            android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+            android:layout_weight="1"
+            android:text="@string/create_shortcut"
+            android:textSize="12sp"
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/hideapp_tv_pkgname"
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/hideapp_cb_shortcut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="APP PkgName"
-            android:textSize="8sp"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:minHeight="0dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            style="@style/Widget.Material3.CompoundButton.CheckBox" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/hideapp_iv_appicon"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_null" />
-
-</RelativeLayout>
+</LinearLayout>

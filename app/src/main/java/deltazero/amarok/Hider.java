@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.Collections;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import deltazero.amarok.ui.settings.SwitchAppHiderActivity;
@@ -25,6 +27,8 @@ public final class Hider {
 
     public static boolean initialized = false;
     public static MutableLiveData<State> state;
+    /** 单应用取消隐藏完成事件，value 为被取消隐藏的包名。供 ShortcutLaunchActivity 监听。 */
+    public static final MutableLiveData<String> singleUnhideEvent = new MutableLiveData<>();
 
     public enum State {
         HIDDEN,
@@ -146,6 +150,52 @@ public final class Hider {
             // As a result, if the state changes into VISIBLE from HIDDEN just before, the service won't start.
             new Handler(Looper.getMainLooper()).post(
                     () -> QuickHideService.startService(context));
+        });
+    }
+
+    /**
+     * 仅取消隐藏指定的单个应用，不影响其他隐藏应用，也不改变全局 Hider.State。
+     * 完成后通过 {@link #singleUnhideEvent} 发出通知，并将包名记入 tempUnhiddenApps。
+     * 用于快捷方式启动、应用更新等单应用维度的场景。
+     */
+    public static void unhideOne(Context context, String packageName) {
+        unhideOneWithCallback(context, packageName, null);
+    }
+
+    /**
+     * 仅取消隐藏指定的单个应用，完成后在主线程执行 {@code onComplete} 回调。
+     * 使用回调而非 LiveData，避免 LiveData 回放旧值导致未取消隐藏就启动 App 的问题。
+     */
+    public static void unhideOneWithCallback(Context context, String packageName, Runnable onComplete) {
+        PrefMgr.getAppHider(context).tryToActivate((appHiderClass, succeed, msg) -> {
+            if (succeed) {
+                processUnhideOne(context, packageName, onComplete);
+                return;
+            }
+            showNoHiderToast(context, msg);
+        });
+    }
+
+    private static void processUnhideOne(Context context, String packageName, Runnable onComplete) {
+        threadHandler.post(() -> {
+            Log.i(TAG, "Process 'unhideOne' start: " + packageName);
+            PrefMgr.getAppHider(context).unhide(Collections.singleton(packageName));
+            Log.i(TAG, "Process 'unhideOne' finish: " + packageName);
+
+            // 只在全局隐藏中时才记录临时状态
+            // 全局 UNHIDDEN 时，锁屏后的全量 AutoHide 会覆盖，不需要单独记录
+            if (state.getValue() == State.HIDDEN) {
+                PrefMgr.addTempUnhiddenApp(packageName);
+            }
+
+            singleUnhideEvent.postValue(packageName);
+
+            if (!PrefMgr.getDisableToasts())
+                Toast.makeText(context, R.string.unhidden_toast, Toast.LENGTH_SHORT).show();
+
+            if (onComplete != null) {
+                new Handler(Looper.getMainLooper()).post(onComplete);
+            }
         });
     }
 
